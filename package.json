@@ -1,0 +1,14 @@
+{
+  "name": "ng",
+  "version": "0.0.1",
+  "description": "a front-end router and DOM render 一个前端路由和DOM渲染\ta simple and naive front-end router and DOM render 一个图样、图乃义务的前端路由和DOM渲染",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^6.7.2"
+  }
+}
