@@ -36,10 +36,12 @@ class Router {
         }
     }
 
+    // 刷新DOM 更新钩子函数
     refreshDom(controller) {
         const template = controller.template;
         if (template && typeof template === 'string' && this.rootDom) {
             if (controller.$beforeMount) controller.$beforeMount();
+            // 钩子函数之前调用
             this.replaceDom(controller);
             if (controller.$afterMount) controller.$afterMount();
         } else {
@@ -47,6 +49,7 @@ class Router {
         }
     }
 
+    // 更新DOM 替换DOM
     replaceDom(controller) {
         const template = controller.template;
         if (this.rootDom.hasChildNodes()) {
