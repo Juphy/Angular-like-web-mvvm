@@ -19,6 +19,8 @@ class Router {
                 delete window.routerController;
             }
             const controller = new this.routes[this.currentUrl];
+            window.routerController = controller;
+            if (controller.$beforeInit) controller.$beforeInit();
             if (controller.$onInit) controller.$onInit();
             this.refreshDom(controller);
         }
@@ -27,7 +29,13 @@ class Router {
     init(arr) {
         if (arr && arr instanceof Array) {
             arr.forEach(route => {
-                this.route(route.path, route.controller);
+                // this.route(route.path, route.controller);
+                if (route.path && route.controller && route.controller instanceof Function) {
+                    this.route(route.path, route.controller);
+                } else {
+                    console.error('need path or controller');
+                    return false;
+                }
             });
             const rootDom = document.querySelector('#root');
             this.rootDom = rootDom || null;
@@ -40,9 +48,10 @@ class Router {
     refreshDom(controller) {
         const template = controller.template;
         if (template && typeof template === 'string' && this.rootDom) {
+            // 钩子函数 beforeMount()
             if (controller.$beforeMount) controller.$beforeMount();
-            // 钩子函数之前调用
             this.replaceDom(controller);
+            // 钩子函数 afterMount()
             if (controller.$afterMount) controller.$afterMount();
         } else {
             console.error('refreshDom failed: template or rootDom is not exit');
@@ -58,8 +67,9 @@ class Router {
                 this.rootDom.removeChild(childs.item(i));
             }
         }
-        window.routerController = controller;
+        // window.routerController = controller;
         let templateDom = this.parseDom(template);
+        // 文档碎片
         let fragment = document.createDocumentFragment();
         fragment.appendChild(templateDom);
         this.rootDom.appendChild(fragment);

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>test路由</title>
+    <script type="text/javascript" src="../src/Watcher.js"></script>
+    <script type="text/javascript" src="../src/Component.js"></script>
+    <script type="text/javascript" src="../src/Controller.js"></script>
     <script type="text/javascript" src="../src/Route.js"></script>
 </head>
 
@@ -12,51 +15,80 @@
     <div id="root"></div>
     <a href="#R1">点击去id1</a>
     <a href="#R2">点击去id2</a>
+    <p id="console"></p>
+    <button onclick="window.routerController.showAlert()">window.routerController</button>
+    <button onclick="testThis.showAlert()">window</button>
 </body>
 
 </html>
 <script type="text/javascript">
-    class R1 {
-        template;
+    const testThis = {};
+    testThis.showAlert = () => {
+        console.log('箭头函数的this === window：', this === window);
+    }
+    class R1 extends controller {
         constructor() {
             console.log('init1');
-            this.template = `<p rtClick="this.showAlert1()">111111111111</p>`;
+            this.template = `<p rtClick="this.showAlert()">点我！！！！！啊哈哈</p>`;
+            this.console = document.getElementById('console');
+            this.state = { a: 1 };
         }
         $onInit() {
+            this.console.innerText = 'is $onInit';
             console.log('is $Oninit');
         }
         $beforeMount() {
+            this.console.innerText = "is $beforeMount";
             console.log('is $beforeMount');
         }
         $afterMount() {
+            this.console.innerText = "is $afterMount";
             console.log('is $afterMount');
         }
         $onDestory() {
+            this.console.innerText = "is $onDestory";
             console.log('is $onDestory');
         }
-        showAlert1() {
+        $watchState(oldData, newData) {
+            console.log('oldData Component:', oldData);
+            console.log('newData Component:', newData);
+        }
+
+        showAlert() {
+            this.setState('a', 2);
             alert('111111111111')
         }
     }
 
-    class R2 {
+    class R2 extends Controller {
         constructor() {
-            console.log('init2');
-            this.template = '<p rtClick="this.showAlert2()">22222222222</p>';
+            super();
+            this.console = document.getElementById('console');
+            this.template = '<p rtClick="this.showAlert()">还是点我！！！！！啊</p>';
+            this.state = { a: 1 };
+        }
+        $watchState(oldData, newData) {
+            console.log('oldData Component:', oldData);
+            console.log('newData Component:', newData)
         }
         $onInit() {
+            this.console.innerText = 'is $onInit';
             console.log('is $onInit');
         }
         $beforeMount() {
+            this.console.innerText = "is $beforeMount";
             console.log('is $beforeMount');
         }
         $afterMount() {
+            this.console.innerText = "is $afterMount";
             console.log('is $afterMount');
         }
         $onDestory() {
+            this.console.innerText = "is $onDestory";
             console.log('is $onDestory');
         }
-        showAlert2() {
+        showAlert() {
+            this.setState('a', 2);
             alert('22222222222')
         }
     }
